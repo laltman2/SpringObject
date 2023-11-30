@@ -116,20 +116,10 @@ void loop() {
     }
   }
   else if (learning_mode == 1) { // free state
-    if (mySpring.measured){
-      Serial.print("Free Displacement: ");
-      Serial.print(mySpring.free_disp);
-      Serial.print(", ");
-    }
     plot_mode=1;
     mySpring.takeReading(1);
   } 
   else if (learning_mode == 2) { // clamp state
-  if (mySpring.measured){
-      Serial.print("Clamped Displacement: ");
-      Serial.print(mySpring.clamp_disp);
-      Serial.print(", ");
-    }
     plot_mode=1;
     mySpring.takeReading(2);
   }

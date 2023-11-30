@@ -6,11 +6,6 @@ class spring2{
   
 public:
 
-  volatile int encPos = 0;
-  volatile boolean PastA = 0;
-  volatile boolean PastB = 0;
-  volatile boolean CurrentA = 0;
-  volatile boolean CurrentB = 0;
   double input, output, setpoint;
 
   // physical and learning DOF
@@ -19,15 +14,6 @@ public:
 
   // flex sensor read value after LPF
   float current_disp;
-  int cumulative_value;
-  int ADCflex;
-
-  // check if flex reading is steady
-  bool isSteady = false;
-  // check whether a measurement has been taken or not
-  volatile boolean measured;
-  bool updated = false;
-  int waitCounter;
 
   void upLayer();
   void downLayer();
@@ -50,6 +36,22 @@ private:
   byte pwmPin;
   byte dirPin;
   byte flexPin;
+
+  volatile int encPos = 0;
+  volatile boolean PastA = 0;
+  volatile boolean PastB = 0;
+  volatile boolean CurrentA = 0;
+  volatile boolean CurrentB = 0;
+
+   int cumulative_value;
+  int ADCflex;
+
+  // check if flex reading is steady
+  bool isSteady = false;
+  // check whether a measurement has been taken or not
+  volatile boolean measured;
+  bool updated = false;
+  int waitCounter;
 };
 
 #endif
