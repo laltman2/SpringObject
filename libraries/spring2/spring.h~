@@ -1,0 +1,41 @@
+#ifndef spring_h
+#define spring_h
+
+#include <Arduino.h>
+
+class spring{
+  
+public:
+  // pin definitions
+  const byte encPinA;
+  const byte encPinB;
+  const byte pwmPin;
+  const byte dirPin;
+  const int flexPin;
+  
+  // encoder stuff
+  double input, output, setpoint;
+  volatile int encPos = 0;
+  volatile boolean PastA = 0;
+  volatile boolean PastB = 0;
+  volatile boolean CurrentA = 0;
+  volatile boolean CurrentB = 0;
+
+  //flex sensor stuff
+  bool isSteady = false; // check if flex reading is steady
+  volatile boolean measured; // check whether a measurement has been taken or not
+  bool updated = false; // check whether layer has been updated
+  int ADCflex; //raw flex sensor read
+  int cumulative_value; // flex sensor read value after LPF
+  
+  // physical DoF
+  float free_disp;
+  float clamp_disp;
+
+  void doEncoderA();
+  void doEncoderB();
+
+  double output_limits(double Output);
+};
+
+#endif
