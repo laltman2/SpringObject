@@ -3,9 +3,9 @@
 
 int initFlag;
 
-float k_p = 50;
-float k_i = 0;
-float k_d = 0;
+// float k_p = 50;
+// float k_i = 0;
+// float k_d = 0;
 
 // learning mode and hyperparams (0:none, 1:free state, 2:clamped state, 3:update state)
 int learning_mode; 
@@ -15,9 +15,6 @@ int plot_mode;
 // const int numSprings = 1;
 // byte pins[numSprings][5] = {{2, 3, 8, 9, A0}};
 spring2 mySpring(2, 3, 8, 9, A0);
-
-// // //initialization of PID function for motor control
- PID myPID(&mySpring.input, &mySpring.output, &mySpring.setpoint, k_p, k_i, k_d, DIRECT);
 
 //function to plot sensor read out
 void sensor_plot(float cflex) {
@@ -51,13 +48,8 @@ void setup() {
   //setup serial communication
   Serial.begin(9600);
 
-  // pinMode(flexpin, INPUT);
   //setup Springs
   mySpring.init();
-
-  // //setup PID
-  myPID.SetMode(AUTOMATIC);
-  myPID.SetOutputLimits(-250, 250);
 
   learning_mode = 0;
   plot_mode = 0;
@@ -65,17 +57,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  mySpring.onLoop_beforePID();
-  //implement PID control (only proportional control is being used)
-  if (abs(mySpring.input - mySpring.setpoint) < 2){
-    myPID.SetTunings(0, 0, 0); 
-  }
-  else{
-    myPID.SetTunings(k_p, k_d, k_i); 
-  }
-  myPID.Compute();
-  mySpring.onLoop_afterPID();
+  mySpring.onLoop();
 
   if (Serial.available() > 0)  {    //reading the data from Serial port
     initFlag = Serial.read();

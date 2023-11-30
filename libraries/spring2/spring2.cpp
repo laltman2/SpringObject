@@ -2,9 +2,14 @@
 #include "spring2.h"
 #include "filter.h"
 #include "conversion.h"
+#include "PID_v1.h"
 
 double halfLayer = 12;
 int PIDout = 10;
+
+float k_p = 50;
+float k_i = 0;
+float k_d = 0;
 
 conversion myconversion;
 filter myfilter;
@@ -33,6 +38,8 @@ spring2::spring2(byte encPinA, byte encPinB, byte pwmPin, byte dirPin, byte flex
   this -> encPinB = encPinB;
   this -> pwmPin = pwmPin;
   this -> dirPin = dirPin;
+
+  myPID = new PID(&input, &output, &setpoint, k_p, k_i, k_d, DIRECT);
 }
 
 void spring2::init(){
@@ -46,6 +53,9 @@ void spring2::init(){
   //initialize encoder bits
   PastA = (boolean)digitalRead(encPinA);
   PastB = (boolean)digitalRead(encPinB);
+
+  myPID -> SetMode(AUTOMATIC);
+  myPID -> SetOutputLimits(-250, 250);
 
   pointerToClass = this; // assign current instance to pointer (IMPORTANT!!!)
 
@@ -70,15 +80,22 @@ void spring2::downLayer(){
   setpoint = input - halfLayer;
 }
 
-void spring2::onLoop_beforePID(){
+void spring2::onLoop(){
   ADCflex = analogRead(flexPin);
   input = encPos;
 
   cumulative_value = myfilter.sensor_LPF(ADCflex, cumulative_value);
   current_disp = myconversion.flex2disp(cumulative_value);
-}
 
-void spring2::onLoop_afterPID(){
+  //implement PID control (only proportional control is being used)
+  if (abs(input - setpoint) < 2){
+    myPID -> SetTunings(0, 0, 0); 
+  }
+  else{
+    myPID -> SetTunings(k_p, k_d, k_i); 
+  }
+  myPID -> Compute();
+
   output = output_limits(output);
 
   //choose motor direction : clockwise/anticlockwise

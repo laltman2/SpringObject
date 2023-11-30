@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <PID_v1.h>
 #ifndef spring2_h
 #define spring2_h
 
@@ -17,8 +18,7 @@ public:
 
   void upLayer();
   void downLayer();
-  void onLoop_beforePID();
-  void onLoop_afterPID();
+  void onLoop();
   void mode_reset();
   void takeReading(int LM);
   void doUpdate();
@@ -43,7 +43,7 @@ private:
   volatile boolean CurrentA = 0;
   volatile boolean CurrentB = 0;
 
-   int cumulative_value;
+  int cumulative_value;
   int ADCflex;
 
   // check if flex reading is steady
@@ -52,6 +52,8 @@ private:
   volatile boolean measured;
   bool updated = false;
   int waitCounter;
+
+  PID* myPID;
 };
 
 #endif
