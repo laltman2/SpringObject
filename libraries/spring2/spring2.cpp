@@ -11,8 +11,6 @@ float k_p = 50;
 float k_i = 0;
 float k_d = 0;
 
-conversion myconversion;
-filter myfilter;
 
 //function to set min thresholds for PWM value
 double output_limits(double Output){
@@ -22,15 +20,15 @@ double output_limits(double Output){
 }
 
 // Outside of class
-spring2 *pointerToClass; // declare a pointer to testLib class
+//spring2 *pointerToClass; // declare a pointer to class
 
-static void InterruptHandlerA(void) { // define global handler
-  pointerToClass->doEncoderA(); // calls class member handler
-}
+//static void InterruptHandlerA(void) { // define global handler
+//  pointerToClass->doEncoderA(); // calls class member handler
+}//
 
-static void InterruptHandlerB(void) { // define global handler
-  pointerToClass->doEncoderB(); // calls class member handler
-}
+//static void InterruptHandlerB(void) { // define global handler
+//  pointerToClass->doEncoderB(); // calls class member handler
+//}
 
 spring2::spring2(byte encPinA, byte encPinB, byte pwmPin, byte dirPin, byte flexPin){
   this -> flexPin = flexPin;
@@ -57,11 +55,11 @@ void spring2::init(){
   myPID -> SetMode(AUTOMATIC);
   myPID -> SetOutputLimits(-250, 250);
 
-  pointerToClass = this; // assign current instance to pointer (IMPORTANT!!!)
+  //pointerToClass = this; // assign current instance to pointer (IMPORTANT!!!)
 
   //declare interrupt service routines
-  attachInterrupt(digitalPinToInterrupt(encPinA), InterruptHandlerA, RISING);
-  attachInterrupt(digitalPinToInterrupt(encPinB), InterruptHandlerB, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(encPinA), InterruptHandlerA, RISING);
+  //attachInterrupt(digitalPinToInterrupt(encPinB), InterruptHandlerB, CHANGE);
 }
 
 void spring2::doEncoderA(void){

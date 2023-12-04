@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <PID_v1.h>
+#include <filter.h>
+#include <conversion.h>
 #ifndef spring2_h
 #define spring2_h
 
@@ -16,6 +18,10 @@ public:
   // flex sensor read value after LPF
   float current_disp;
 
+  // check whether a measurement has been taken or not
+  volatile boolean measured;
+  bool updated = false;
+
   void upLayer();
   void downLayer();
   void onLoop();
@@ -27,12 +33,13 @@ public:
   void doEncoderA(void);
   void doEncoderB(void);
 
+  byte encPinA;
+  byte encPinB;
+
   spring2(byte encPinA, byte encPinB, byte pwmPin, byte dirPin, byte flexPin);
 
 private:
     // pin definitions
-  byte encPinA;
-  byte encPinB;
   byte pwmPin;
   byte dirPin;
   byte flexPin;
@@ -48,10 +55,10 @@ private:
 
   // check if flex reading is steady
   bool isSteady = false;
-  // check whether a measurement has been taken or not
-  volatile boolean measured;
-  bool updated = false;
   int waitCounter;
+
+  conversion myconversion;
+  filter myfilter;
 
   PID* myPID;
 };
