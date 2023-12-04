@@ -24,7 +24,7 @@ double output_limits(double Output){
 
 //static void InterruptHandlerA(void) { // define global handler
 //  pointerToClass->doEncoderA(); // calls class member handler
-}//
+//{
 
 //static void InterruptHandlerB(void) { // define global handler
 //  pointerToClass->doEncoderB(); // calls class member handler
